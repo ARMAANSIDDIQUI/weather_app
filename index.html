@@ -6,14 +6,14 @@
   <title>Weather App</title>
   <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: url('https://imgs.search.brave.com/1vCmpQoa8RslkVsFIaag91wOi8Ya2EBZuyNTbTpvClo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTQw/MDQxNjgwNS9waG90/by9kcmFtYXRpYy1z/a3ktYXQtc3Vuc2V0/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1sWlM0QU9VUENN/ZmQyM1RPa1BidGlu/TDcxSnJ3YlI0NTV1/SWoyQXBCNWNNPQ') no-repeat center center fixed;
-        background-size: cover;
-        margin: 0;
-        padding: 0;
-        color: #222;
-      }
-      
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://imgs.search.brave.com/1vCmpQoa8RslkVsFIaag91wOi8Ya2EBZuyNTbTpvClo/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTQw/MDQxNjgwNS9waG90/by9kcmFtYXRpYy1z/a3ktYXQtc3Vuc2V0/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1sWlM0QU9VUENN/ZmQyM1RPa1BidGlu/TDcxSnJ3YlI0NTV1/SWoyQXBCNWNNPQ') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
     .container {
       width: 320px;
       margin: 100px auto;
@@ -25,12 +25,12 @@
       text-align: center;
       color: #fff;
     }
-  
+
     h2 {
       margin-bottom: 20px;
       color: #fff;
     }
-  
+
     input {
       padding: 10px;
       width: 70%;
@@ -41,7 +41,7 @@
       background-color: #ffffffcc;
       color: #000;
     }
-  
+
     button {
       padding: 10px 18px;
       border: none;
@@ -53,11 +53,11 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-  
+
     button:hover {
       background: #0056b3;
     }
-  
+
     .weather-info {
       margin-top: 25px;
       background: rgba(255, 255, 255, 0.85);
@@ -68,53 +68,52 @@
       display: none;
       text-align: center;
     }
-  
-    .container h2{
+
+    .container h2 {
       color: #222;
     }
 
     .weather-info h2 {
-        color: #222;
-      }
-      
-      .weather-info h3 {
-        color: #444;
-      }
-      
-      .weather-info p {
-        color: #555;
-      }
-      
+      color: #222;
+    }
+
+    .weather-info h3 {
+      color: #444;
+    }
+
+    .weather-info p {
+      color: #555;
+    }
 
     .clear {
       margin-top: 15px;
       background: #dc3545;
     }
-  
+
     .clear:hover {
       background: #b52a36;
     }
-  
+
     @media (max-width: 768px) {
       .container {
         width: 85%;
         margin-top: 50px;
       }
-  
+
       input {
         width: 100%;
       }
     }
   </style>
-  
 </head>
 <body>
   <div class="container">
     <h2>🌤️ Weather App</h2>
-    <input type="text" id="city" placeholder="Enter city name">
+    <input type="text" id="city" placeholder="Enter city name" list="city-list" oninput="filterCities(this.value)">
+    <datalist id="city-list"></datalist>
     <br>
     <button onclick="getWeather()">Get Weather</button>
-    
+
     <div class="weather-info" id="weather-info">
       <img id="weather-icon" src="" alt="Weather Icon" />
       <h3 id="city-name"></h3>
@@ -128,6 +127,30 @@
   </div>
 
   <script>
+    const cities = [
+      "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Pune", "Jaipur", "Surat",
+      "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Vadodara", "Firozabad", "Ludhiana",
+      "Rajkot", "Agra", "Nashik", "Faridabad", "Meerut", "Kalyan", "Vasai", "Varanasi", "Srinagar", "Aurangabad",
+      "Dhanbad", "Amritsar", "Navi Mumbai", "Allahabad", "Ranchi", "Howrah", "Coimbatore", "Jabalpur", "Gwalior", "Vijayawada",
+      "Jodhpur", "Madurai", "Raipur", "Kota", "Guwahati", "Chandigarh", "Solapur", "Hubli", "Mysore", "Tiruchirappalli",
+      "Bareilly", "Aligarh", "Tiruppur", "Moradabad", "Jalandhar", "Bhubaneswar", "Salem", "Warangal", "Guntur", "Bhiwandi",
+      "Saharanpur", "Gorakhpur", "Bikaner", "Amravati", "Noida", "Jamshedpur", "Bhilai", "Cuttack", "Firozabad", "Kochi",
+      "Dehradun", "Ajmer", "Jamnagar", "Ujjain", "Loni", "Siliguri", "Jhansi", "Ulhasnagar", "Nellore", "Jammu",
+      "Belgaum", "Mangalore", "Tirunelveli", "Malegaon", "Gaya", "Udaipur", "Maheshtala", "Davanagere", "Kozhikode", "Akola",
+      "Kurnool", "Bokaro", "Bellary", "Patiala", "Gandhinagar", "Shimla", "Rewa", "Nanded", "Hapur", "Bhatpara"
+    ];
+
+    function filterCities(input) {
+      const list = document.getElementById("city-list");
+      list.innerHTML = "";
+      const filtered = cities.filter(city => city.toLowerCase().startsWith(input.toLowerCase()));
+      filtered.forEach(city => {
+        const option = document.createElement("option");
+        option.value = city;
+        list.appendChild(option);
+      });
+    }
+
     const clearBtn = document.querySelector('.clear');
     clearBtn.addEventListener('click', clear);
 
